@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify
 import pickle
 from gmail_reader import fetch_latest_emails
 import os
+from googleapiclient.discovery import build
 from flask import redirect, request, jsonify
 from google_auth_oauthlib.flow import Flow
 from google.oauth2.credentials import Credentials
@@ -55,6 +56,21 @@ def oauth2callback():
         token.write(creds.to_json())
 
     return "✅ Gmail connected successfully! You can close this tab."
+def get_gmail_service():
+    if not os.path.exists("token.json"):
+        return None
+
+    creds = Credentials.from_authorized_user_file(
+        "token.json",
+        SCOPES
+    )
+
+    if creds.expired and creds.refresh_token:
+        creds.refresh(Request())
+        with open("token.json", "w") as token:
+            token.write(creds.to_json())
+
+    return build("gmail", "v1", credentials=creds)    
 
 
 app = Flask(__name__)
@@ -84,18 +100,15 @@ def predict():
 
 @app.route("/fetch-gmail", methods=["GET"])
 def fetch_gmail():
-    emails = fetch_latest_emails(limit=5)
+    service = get_gmail_service()
 
-    formatted = []
-    for e in emails:
-        formatted.append({
-            "subject": e["subject"],
-            "sender": e["from"],
-            "body": e["body"]
-        })
-
-    return jsonify({"emails": formatted})
+    if not service:
+        return jsonify({
+            "error": "Not authenticated",
+            "login_url": "/login"
+        }), 401
 
 if __name__ == "__main__":
     app.run(debug=True)
+
 
