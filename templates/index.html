@@ -155,6 +155,7 @@
 <script>
 const API_BASE = "";
 
+// 1. Manual Prediction
 async function checkManual() {
     const input = document.getElementById('emailInput').value.trim();
     const result = document.getElementById('result');
@@ -169,32 +170,31 @@ async function checkManual() {
     try {
         const response = await fetch(`${API_BASE}/predict`, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ content: input })
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ content: input }),
+            credentials: 'include' // ADDED THIS
         });
 
         const data = await response.json();
-        result.classList.remove('hidden');
-
-        if (data.spam) {
-            result.className = "result spam";
-            result.innerHTML = `<span style="font-size:20px;">🚫</span><span>SPAM</span>`;
-        } else {
-            result.className = "result ham";
-            result.innerHTML = `<span class="checkmark">✓</span><span>NOT SPAM (HAM)</span>`;
-        }
-
+        renderResult(data);
     } catch (error) {
         alert("Backend error. Please try again.");
-        console.error(error);
     }
 }
 
+// 2. Fetch Gmail (The login part)
 async function fetchGmail() {
     try {
-        const response = await fetch(`${API_BASE}/fetch-gmail`);
+        const response = await fetch(`${API_BASE}/fetch-gmail`, {
+            credentials: 'include' // ADDED THIS
+        });
+        
+        // If the server says you aren't logged in, redirect to login
+        if (response.status === 401) {
+            window.location.href = "/login"; 
+            return;
+        }
+
         const data = await response.json();
         const select = document.getElementById('gmailSelect');
         select.innerHTML = '<option value="">Select an email</option>';
@@ -207,46 +207,45 @@ async function fetchGmail() {
         });
     } catch (error) {
         alert("Error fetching Gmail. Please try again.");
-        console.error(error);
     }
 }
 
+// 3. Analyze Selected Email
 async function analyzeGmail() {
     const select = document.getElementById('gmailSelect');
     const selectedOption = select.options[select.selectedIndex];
-    const result = document.getElementById('result');
-
-    if (!selectedOption.value) {
+    
+    if (!selectedOption || !selectedOption.value) {
         alert('Please select an email');
         return;
     }
 
     const content = selectedOption.dataset.content;
-    result.classList.add('hidden');
-
     try {
         const response = await fetch(`${API_BASE}/predict`, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ content: content })
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ content: content }),
+            credentials: 'include' // ADDED THIS
         });
 
         const data = await response.json();
-        result.classList.remove('hidden');
-
-        if (data.spam) {
-            result.className = "result spam";
-            result.innerHTML = `<span style="font-size:20px;">🚫</span><span>SPAM</span>`;
-        } else {
-            result.className = "result ham";
-            result.innerHTML = `<span class="checkmark">✓</span><span>NOT SPAM (HAM)</span>`;
-        }
-
+        renderResult(data);
     } catch (error) {
-        alert("Backend error. Please try again.");
-        console.error(error);
+        alert("Prediction error.");
+    }
+}
+
+// Helper to show result
+function renderResult(data) {
+    const result = document.getElementById('result');
+    result.classList.remove('hidden');
+    if (data.spam) {
+        result.className = "result spam";
+        result.innerHTML = `🚫 SPAM`;
+    } else {
+        result.className = "result ham";
+        result.innerHTML = `✓ NOT SPAM (HAM)`;
     }
 }
 </script>
@@ -254,3 +253,4 @@ async function analyzeGmail() {
 
 </body>
 </html>
+
