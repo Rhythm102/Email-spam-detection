@@ -17,7 +17,7 @@ app.secret_key = os.environ.get("FLASK_SECRET_KEY", "any-random-long-string")
 app.config.update(
     SESSION_COOKIE_SECURE=True,
     SESSION_COOKIE_HTTPONLY=True,
-    SESSION_COOKIE_SAMESITE='Lax',
+    SESSION_COOKIE_SAMESITE='None',
 )
 
 # Crucial for OAuth on Render
@@ -152,6 +152,7 @@ if __name__ == "__main__":
     # FIX: Use the port provided by Render
     port = int(os.environ.get("PORT", 8000))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
