@@ -5,10 +5,17 @@ from google_auth_oauthlib.flow import Flow
 from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1' if os.environ.get('DEBUG') == 'True' else '0'
+os.environ['OAUTHLIB_RELAX_TOKEN_SCOPE'] = '1'
 
 # -------------------- CONFIG --------------------
 
 app = Flask(__name__)
+app.config.update(
+    SESSION_COOKIE_SECURE=True,
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE='Lax',
+)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "dev-secret")
 
 SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"]
@@ -166,6 +173,7 @@ def fetch_gmail():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)
+
 
 
 
