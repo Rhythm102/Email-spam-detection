@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email Spam Detection</title>
+    <title>AI Email Spam Detector</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
         * {
@@ -13,140 +14,201 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            /* background: linear-gradient(135deg, #0d4d4d 0%, #0a3d3d 50%, #073333 100%); */
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            /* Aapka original background image */
             background-image: url("/static/royel-blue-gradiea-kit-website-background-web3-gradient-background-collection_203617-22.avif");
             background-size: cover;
-            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
             padding: 20px;
+            color: #1a202c;
+            overflow-x: hidden;
         }
 
+        /* --- Educational Top Section --- */
+        .info-container {
+            max-width: 700px;
+            text-align: center;
+            margin: 20px 0 30px 0;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(12px);
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .info-container h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #0f4c75;
+        }
+
+        .info-container p {
+            font-size: 15px;
+            line-height: 1.5;
+            color: #2d3748;
+        }
+
+        /* --- Main Tool Card --- */
         .card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 40px;
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px;
             width: 100%;
-            max-width: 480px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .header {
+            max-width: 500px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
             text-align: center;
             margin-bottom: 30px;
         }
 
-        .title {
-            font-size: 24px;
-            font-weight: 700;
+        .card h2 {
             color: #0f4c75;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
+            font-size: 22px;
+            margin-bottom: 5px;
         }
 
         .subtitle {
-            font-size: 14px;
-            color: #4a5568;
-            margin-top: 6px;
+            font-size: 13px;
+            color: #718096;
+            margin-bottom: 20px;
         }
 
         .input-box {
             width: 100%;
             min-height: 120px;
-            padding: 16px;
+            padding: 15px;
             border: 1px solid #e2e8f0;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 14px;
-            resize: vertical;
             margin-bottom: 15px;
-            background: rgba(255, 255, 255, 0.8);
-            transition: border-color 0.3s ease;
+            outline: none;
+            transition: 0.3s;
         }
 
         .input-box:focus {
-            outline: none;
             border-color: #0f4c75;
             box-shadow: 0 0 0 3px rgba(15, 76, 117, 0.1);
         }
 
-        select.input-box {
-            min-height: auto;
-        }
-
         .check-button {
             width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #0f4c75 0%, #1e5bb8 100%);
+            padding: 14px;
+            background: #1a56ad;
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            margin-bottom: 12px;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: 0.3s;
         }
 
         .check-button:hover {
-            background: linear-gradient(135deg, #0a3a5c 0%, #1a4d9a 100%);
+            background: #15458c;
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(15, 76, 117, 0.3);
         }
+
+        /* --- Socials & Footer (FIXED VISIBILITY) --- */
+        .footer-section {
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 20px;
+            margin-top: auto; /* Push to bottom if content is short */
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 10px;
+        }
+
+        .social-links a {
+            color: #0f4c75;
+            font-size: 26px;
+            text-decoration: none;
+            transition: 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: #3282b8;
+            transform: scale(1.2);
+        }
+
+        .footer-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-top: 5px;
+        }
+
+        .heart { color: #e53e3e; }
 
         .result {
             margin-top: 15px;
-            padding: 16px;
+            padding: 12px;
             border-radius: 8px;
-            font-size: 18px;
-            font-weight: 700;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            font-weight: bold;
         }
-
-        .ham {
-            background: #f0fdf4;
-            color: #166534;
-            border: 2px solid #86efac;
-        }
-
-        .spam {
-            background: #fef2f2;
-            color: #991b1b;
-            border: 2px solid #fca5a5;
-        }
-
-        .hidden {
-            display: none;
-        }
+        .spam { background: #fee2e2; color: #991b1b; }
+        .ham { background: #d1fae5; color: #065f46; }
+        .hidden { display: none; }
     </style>
 </head>
 
 <body>
-<div class="card">
-    <div class="header">
-        <div class="title">📧 Email Spam Detection</div>
-        <div class="subtitle">Check whether an email is Spam or Not</div>
+
+    <div class="info-container">
+        <h1>Why Use AI for Spam Detection?</h1>
+        <p>
+            Traditional filters rely on "Blacklists" and "Keywords," but modern cyber-attacks are much smarter. 
+            Scammers now use <strong>Polymorphic Phishing</strong>—changing their message structure for every target to stay invisible.
+        </p>
+        <p style="margin-top: 15px; font-size: 14px; text-align: left; padding: 0 10px;">
+            • <strong>Deep Semantic Analysis:</strong> Our AI doesn't just look for "bad words." It understands the <em>tone</em> and <em>context</em> of the entire email to identify hidden threats.<br>
+            • <strong>Zero-Day Protection:</strong> It can detect brand-new scam patterns that haven't been reported yet by recognizing suspicious behavioral traits.<br>
+            • <strong>Combatting AI-Generated Scams:</strong> As hackers use LLMs to write "perfect" emails, only an AI-driven defense can effectively identify the subtle robotic patterns in their text.
+        </p>
     </div>
 
-    <!-- Manual Input -->
-    <textarea class="input-box" id="emailInput"
-        placeholder="Paste email content here..."></textarea>
+    <div class="card">
+        <h2>📧 Email Spam Detection</h2>
+        <p class="subtitle">Check whether an email is Spam or Not</p>
+        
+        <textarea class="input-box" id="emailInput" placeholder="Paste email content here..."></textarea>
+        
+        <button class="check-button" onclick="checkManual()">Check Email</button>
+        
+        <div id="result" class="result hidden"></div>
+    </div>
 
-    <button class="check-button" onclick="checkManual()">Check Email</button>
-
-    <hr style="margin:20px 0">
-    
-    <div id="result" class="result hidden"></div>
-</div>
+    <div class="footer-section">
+        <div class="social-links">
+            <a href="https://www.linkedin.com/in/rhythm-arora-418763308" target="_blank" title="LinkedIn">
+                <i class="fab fa-linkedin"></i>
+            </a>
+            <a href="https://github.com/Rhythm102" target="_blank" title="GitHub">
+                <i class="fab fa-github"></i>
+            </a>
+            <a href="mailto:rhythmarora.work@gmail.com" title="Email">
+                <i class="fas fa-envelope"></i>
+            </a>
+        </div>
+        <p class="footer-text">Made with <span class="heart">❤</span> Rhythm Arora</p>
+    </div>
 
 <script>
-const API_BASE = "";
+const API_BASE = ""; 
 
 async function checkManual() {
     const input = document.getElementById('emailInput').value.trim();
@@ -162,9 +224,7 @@ async function checkManual() {
     try {
         const response = await fetch(`${API_BASE}/predict`, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ content: input })
         });
 
@@ -173,77 +233,16 @@ async function checkManual() {
 
         if (data.spam) {
             result.className = "result spam";
-            result.innerHTML = `<span style="font-size:20px;">🚫</span><span>SPAM</span>`;
+            result.innerHTML = "🚫 This looks like SPAM!";
         } else {
             result.className = "result ham";
-            result.innerHTML = `<span class="checkmark">✓</span><span>NOT SPAM (HAM)</span>`;
+            result.innerHTML = "✅ This looks like a SAFE email.";
         }
-
     } catch (error) {
-        alert("Backend error. Please try again.");
-        console.error(error);
-    }
-}
-
-async function fetchGmail() {
-    try {
-        const response = await fetch(`${API_BASE}/fetch-gmail`);
-        const data = await response.json();
-        const select = document.getElementById('gmailSelect');
-        select.innerHTML = '<option value="">Select an email</option>';
-        data.emails.forEach((email, index) => {
-            const option = document.createElement('option');
-            option.value = index;
-            option.textContent = `${email.subject} - ${email.sender}`;
-            option.dataset.content = email.body;
-            select.appendChild(option);
-        });
-    } catch (error) {
-        alert("Error fetching Gmail. Please try again.");
-        console.error(error);
-    }
-}
-
-async function analyzeGmail() {
-    const select = document.getElementById('gmailSelect');
-    const selectedOption = select.options[select.selectedIndex];
-    const result = document.getElementById('result');
-
-    if (!selectedOption.value) {
-        alert('Please select an email');
-        return;
-    }
-
-    const content = selectedOption.dataset.content;
-    result.classList.add('hidden');
-
-    try {
-        const response = await fetch(`${API_BASE}/predict`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ content: content })
-        });
-
-        const data = await response.json();
-        result.classList.remove('hidden');
-
-        if (data.spam) {
-            result.className = "result spam";
-            result.innerHTML = `<span style="font-size:20px;">🚫</span><span>SPAM</span>`;
-        } else {
-            result.className = "result ham";
-            result.innerHTML = `<span class="checkmark">✓</span><span>NOT SPAM (HAM)</span>`;
-        }
-
-    } catch (error) {
-        alert("Backend error. Please try again.");
-        console.error(error);
+        alert("Backend error. Make sure your API is running.");
     }
 }
 </script>
-
 
 </body>
 </html>
